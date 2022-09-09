@@ -1,0 +1,3 @@
+This is file that created by git bash commands and open this directly from
+that bash window do not have to go to the folder structre and find it and 
+open it 
