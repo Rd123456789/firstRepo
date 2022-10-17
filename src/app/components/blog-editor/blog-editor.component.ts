@@ -6,8 +6,9 @@ import { BlogService } from "src/app/services/blog.service";
 import { Router, ActivatedRoute, ParamMap } from "@angular/router";
 import { AppUser } from "src/app/models/appuser";
 import { AuthService } from "src/app/services/auth.service";
-import { Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { AngularFireStorage, AngularFireStorageModule, AngularFireStorageReference, AngularFireUploadTask } from "@angular/fire/compat/storage";
 
 @Component({
   selector: "app-blog-editor",
@@ -19,17 +20,26 @@ export class BlogEditorComponent implements OnInit, OnDestroy {
   public Editor = ClassicEditor;
   ckeConfig: any;
   postData = new Post();
+  blog:Post
   formTitle = "Add";
   postId;
   appUser: AppUser;
   private unsubscribe$ = new Subject<void>();
+  private downloadUrl:Observable<string>;
+  private angularref :AngularFireStorageReference
+  public snapshot :Observable<any>
+  private task_url : AngularFireUploadTask
+  image :string
 
   constructor(
     private route: ActivatedRoute,
     private datePipe: DatePipe,
     private blogService: BlogService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private store: AngularFireStorage,
+    
+    // private ref_url = AngularFireStorageModule
   ) {
     this.route.paramMap
       .pipe(takeUntil(this.unsubscribe$))
@@ -57,6 +67,7 @@ export class BlogEditorComponent implements OnInit, OnDestroy {
   setPostFormData(postFormData) {
     this.postData.title = postFormData.title;
     this.postData.content = postFormData.content;
+    this.postData.photo_url = this.image
   }
 
   saveBlogPost() {
@@ -75,53 +86,41 @@ export class BlogEditorComponent implements OnInit, OnDestroy {
       });
     }
   }
+  uploadImg(event){
+    const file = event.target.files[0]
+    const path = `blogs/${file.name }`
+    console.log('any');
+    
+    if (file.type.split('/')[0]!='image'){
+      return alert('Please choose Image !')
+      // console.log('not');
+      
+    }
+    else{
+      const task = this.store.upload(path,file)
+      console.log('file uploaded');
+      this.angularref = this.store.ref(path)
+      this.task_url = this.angularref.put(file)
 
+      this.downloadUrl = this.angularref.getDownloadURL()
+      this.downloadUrl.subscribe(url =>this.image = url)
+      console.log(this.image);
+      
+      
+      
+      
+      // this.downloadUrl.subscribe(url )=>this.blogService)
+      
+    }
+  }
+
+   
   setEditorConfig() {
     this.ckeConfig = {
       removePlugins: ["ImageUpload", "MediaEmbed", "EasyImage"],
       heading: {
         options: [
-          {
-            model: "paragraph",
-            title: "Paragraph",
-            class: "ck-heading_paragraph",
-          },
-          {
-            model: "heading1",
-            view: "h1",
-            title: "Heading 1",
-            class: "ck-heading_heading1",
-          },
-          {
-            model: "heading2",
-            view: "h2",
-            title: "Heading 2",
-            class: "ck-heading_heading2",
-          },
-          {
-            model: "heading3",
-            view: "h3",
-            title: "Heading 3",
-            class: "ck-heading_heading3",
-          },
-          {
-            model: "heading4",
-            view: "h4",
-            title: "Heading 4",
-            class: "ck-heading_heading4",
-          },
-          {
-            model: "heading5",
-            view: "h5",
-            title: "Heading 5",
-            class: "ck-heading_heading5",
-          },
-          {
-            model: "heading6",
-            view: "h6",
-            title: "Heading 6",
-            class: "ck-heading_heading6",
-          },
+          
           { model: "Formatted", view: "pre", title: "Formatted" },
         ],
       },
@@ -131,7 +130,7 @@ export class BlogEditorComponent implements OnInit, OnDestroy {
   cancel() {
     this.router.navigate(["/"]);
   }
-
+  
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();

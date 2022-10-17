@@ -12,6 +12,7 @@
     <mat-divider></mat-divider>
     <mat-card-content class="py-3 align-items-center align-content-center">
       <div [innerHTML]="postData?.content"></div>
+      
     </mat-card-content>
   </mat-card>
 </ng-container>
@@ -20,7 +21,9 @@
     <mat-spinner></mat-spinner>
   </div>
 </ng-template>
-<app-social-share></app-social-share>
+
 <mat-divider></mat-divider>
 <app-comments [blogId]="postId"></app-comments>
+<!-- <app-blog-editor></app-blog-editor> -->
 <app-scroller></app-scroller>
+

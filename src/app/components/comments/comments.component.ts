@@ -18,6 +18,12 @@ export class CommentsComponent implements OnInit, OnDestroy {
   @Input()
   blogId: string;
 
+
+
+
+
+  appUserName  = new AppUser()
+
   appUser: AppUser;
   public comments = new Comments();
   commentList$: Observable<Comments[]>;

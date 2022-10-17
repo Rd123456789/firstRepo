@@ -4,9 +4,12 @@ export class Post {
     content: string;
     author: string;
     createdDate: any;
+    photo_url :string;
 
     constructor() {
         this.title = '';
         this.content = '';
+        this.photo_url = '';
+
     }
 }

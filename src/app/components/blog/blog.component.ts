@@ -4,6 +4,7 @@ import { ActivatedRoute, ParamMap } from "@angular/router";
 import { BlogService } from "src/app/services/blog.service";
 import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { HttpClient } from "@angular/common/http";
 
 @Component({
   selector: "app-blog",
@@ -22,6 +23,7 @@ export class BlogComponent implements OnDestroy {
         this.postId = params.get("id");
         this.postData$ = this.blogService.getPostbyId(this.postId);
       });
+     
   }
 
   ngOnDestroy() {

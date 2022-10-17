@@ -18,7 +18,7 @@ export class CommentService {
   getAllCommentsForBlog(blogId: string): Observable<Comments[]> {
     const comments = this.db
       .collection<Comments>("comments", (ref) =>
-        ref.where("blogId", "==", blogId).orderBy("commentDate", "desc")
+        ref.where('blogId' ,'==',blogId)
       )
       .snapshotChanges()
       .pipe(
@@ -29,7 +29,14 @@ export class CommentService {
           }));
         })
       );
-    return comments;
+    console.log((comments));
+    return comments
+   
+    
+  }
+  getPostbyId(id: string): Observable<Comments> {
+    const blogDetails = this.db.doc<Comments>("blogs/" + id).valueChanges();
+    return blogDetails;
   }
 
   deleteAllCommentForBlog(blogId: string) {

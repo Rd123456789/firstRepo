@@ -2,11 +2,11 @@ import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from "@angular/core";
 import { AppComponent } from "./app.component";
-import { environment } from "../environments/environment";
+import { environment, firebaseConfig2 } from "../environments/environment";
 import { RouterModule } from "@angular/router";
 import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
 import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
+// import { HttpClientModule } from "@angular/common/http";
 import { NgMaterialModule } from "./ng-material/ng-material.module";
 import { NgxPaginationModule } from "ngx-pagination";
 import { BlogComponent } from "./components/blog/blog.component";
@@ -18,9 +18,12 @@ import { BlogEditorComponent } from "./components/blog-editor/blog-editor.compon
 import { BlogCardComponent } from "./components/blog-card/blog-card.component";
 import { ExcerptPipe } from "./customPipes/excerpt.pipe";
 import { SlugPipe } from "./customPipes/slug.pipe";
-import { SocialShareComponent } from "./components/social-share/social-share.component";
+import { AngularFireStorageModule } from "@angular/fire/compat/storage";
+// import { HttpClientModule } from "@angular/common/http";
+
 import { PaginatorComponent } from "./components/paginator/paginator.component";
-import { AuthorProfileComponent } from "./components/author-profile/author-profile.component";
+import { HttpClientModule } from "@angular/common/http";
+
 import { AuthGuard } from "./guards/auth.guard";
 import { AdminAuthGuard } from "./guards/admin-auth.guard";
 import { ShareIconsModule } from "ngx-sharebuttons/icons";
@@ -28,11 +31,11 @@ import { ShareButtonsConfig, ShareModule } from "ngx-sharebuttons";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
 import { AngularFireModule } from "@angular/fire/compat";
+import { NewPipePipe } from "./customPipes/new-pipe.pipe";
+// import { HttpClientXsrfModule } from "@angular/common/http";
+// import {HttpClient} from "@angular/http";
 
-const customConfig: ShareButtonsConfig = {
-  autoSetMeta: true,
-  twitterAccount: "ankitsharma_007",
-};
+
 
 @NgModule({
   declarations: [
@@ -46,20 +49,25 @@ const customConfig: ShareButtonsConfig = {
     BlogCardComponent,
     ExcerptPipe,
     SlugPipe,
-    SocialShareComponent,
+   
+
     PaginatorComponent,
-    AuthorProfileComponent,
+    
   ],
+  
+    
   imports: [
-    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireModule.initializeApp(firebaseConfig2),
     AngularFirestoreModule,
     ShareIconsModule,
     NgxPaginationModule,
     HttpClientModule,
+    HttpClientModule,
     FontAwesomeModule,
-    ShareModule.withConfig(customConfig),
+  
     BrowserModule,
     BrowserAnimationsModule,
+  
     NgMaterialModule,
     CKEditorModule,
     FormsModule,
@@ -75,7 +83,7 @@ const customConfig: ShareButtonsConfig = {
         {
           path: "editpost/:id",
           component: BlogEditorComponent,
-          canActivate: [AdminAuthGuard],
+          canActivate: [AuthGuard],
         },
         { path: "blog/:id/:slug", component: BlogComponent },
         { path: "**", component: HomeComponent },

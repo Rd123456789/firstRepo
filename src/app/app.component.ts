@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
+import { BlogEditorComponent } from './components/blog-editor/blog-editor.component';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  declarations: [ BlogEditorComponent ]
 
   constructor(
     private authService: AuthService,

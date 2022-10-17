@@ -12,7 +12,7 @@ export class SnackbarService {
     this.snackBar.open(message, 'Close', {
       duration: 2000,
       panelClass: 'snackbar-ribon',
-      verticalPosition: 'top',
+      verticalPosition: 'bottom',
       horizontalPosition: 'center'
     });
   }

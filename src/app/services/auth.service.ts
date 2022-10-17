@@ -41,6 +41,22 @@ export class AuthService {
 
     const credential = await this.afAuth.signInWithPopup(
       new firebase.auth.GoogleAuthProvider()
+    ).then(res=>{
+      // console.log(res.user.displayName)
+      localStorage.setItem('any',res.user.displayName)
+      return this.updateUserData(credential.user);
+      
+    })
+  
+  }
+  async loginEdit() {
+    // Store the return URL in localstorage, to be used once the user logs in successfully
+    const returnUrl =
+      this.route.snapshot.queryParamMap.get("returnUrl") || this.router.url;
+    localStorage.setItem("returnUrl", returnUrl);
+
+    const credential = await this.afAuth.signInWithPopup(
+      new firebase.auth.GoogleAuthProvider()
     );
     return this.updateUserData(credential.user);
   }
@@ -48,6 +64,7 @@ export class AuthService {
   async logout() {
     this.afAuth.signOut().then(() => {
       this.router.navigate(["/"]);
+      localStorage.removeItem('any')
     });
   }
 
@@ -57,6 +74,7 @@ export class AuthService {
     const data = {
       name: user.displayName,
       email: user.email,
+      isAdmin:false,
       photoURL: user.photoURL,
     };
     return userRef.set(data, { merge: true });

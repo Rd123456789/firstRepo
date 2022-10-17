@@ -1,6 +1,6 @@
 <ng-template #anonymousUser>
   <mat-card class="my-3 mat-elevation-z2">
-    <a (click)="login()">Login with Google</a> to post comments
+    <a (click)="login()">Login with Google</a> to post comments!
   </mat-card>
 </ng-template>
 <mat-card *ngIf="appUser; else anonymousUser" class="my-2 mat-elevation-z2">
@@ -74,29 +74,31 @@
   *ngFor="let comment of commentList$ | async"
   class="my-3 mat-elevation-z2"
 >
-  <mat-card-title>
-    <div class="d-flex justify-content-between">
-      <div>
-        {{ comment?.commentedBy }}
-      </div>
-      <div *ngIf="appUser?.isAdmin">
-        <button
-          mat-icon-button
-          matTooltip="Delete comment"
-          matTooltipPosition="before"
-          color="accent"
-          (click)="deleteComment(comment?.commentId)"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
-    </div>
-  </mat-card-title>
+  <div class="d-flex justify-content-between">
+    <p class="title">{{ comment.commentedBy }}</p>
 
-  <mat-card-subtitle>{{
-    comment?.commentDate | date: "medium"
-  }}</mat-card-subtitle>
+    <div class="d-flex">
+      <p id="new">{{ comment.commentDate }}</p>
+    </div>
+  </div>
+  <div >
+    <p>{{comment.content}}</p>
+
+  </div>
+  <ng-container *ngIf="appUser$ | async">
+    <button
+      mat-icon-button
+      matTooltip="Delete comment"
+      matTooltipPosition="before"
+      color="accent"
+      (click)="deleteComment(comment?.commentId)"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+  </ng-container>
+
+
   <mat-card-content>
-    <p>{{ comment?.content }}</p>
+    <p>{{ comments.content }}</p>
   </mat-card-content>
 </mat-card>

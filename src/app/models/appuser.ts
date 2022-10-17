@@ -1,6 +1,7 @@
 export class AppUser {
+    userId: string;
     name: string;
     email: string;
-    isAdmin: boolean;
+    isAdmin: boolean=false
     photoURL: string;
 }

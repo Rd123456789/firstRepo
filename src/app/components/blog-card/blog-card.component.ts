@@ -7,6 +7,7 @@ import { CommentService } from "src/app/services/comment.service";
 import { SnackbarService } from "src/app/services/snackbar.service";
 import { Observable, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { AppUser } from "src/app/models/appuser";
 
 @Component({
   selector: "app-blog-card",
@@ -17,21 +18,28 @@ export class BlogCardComponent implements OnInit, OnDestroy {
   config: any;
   pageSizeOptions = [];
   blogPost$: Observable<Post[]>;
+  store:string = localStorage.getItem('any')
+  stylestr:any = "<span class='styl'>&#x27A1;</span>"
+  strStore:string = 'assets/garlic.jpg'
+
+  user$ : Observable<AppUser[]>
+  
   appUser$ = this.authService.appUser$;
   private unsubscribe$ = new Subject<void>();
 
   constructor(
     private blogService: BlogService,
+  
     private commentService: CommentService,
     private authService: AuthService,
     private route: ActivatedRoute,
     private snackBarService: SnackbarService
   ) {
-    this.pageSizeOptions = [2, 4, 6];
-    const pageSize = sessionStorage.getItem("pageSize");
+    this.pageSizeOptions = [100];
+   
     this.config = {
-      currentPage: 1,
-      itemsPerPage: pageSize ? +pageSize : this.pageSizeOptions[0],
+
+      itemsPerPage: this.pageSizeOptions
     };
   }
 
@@ -39,10 +47,16 @@ export class BlogCardComponent implements OnInit, OnDestroy {
     this.route.paramMap
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((params: ParamMap) => {
-        this.config.currentPage = params.get("pagenum");
+        this.config.currentPage = params.get("100");
         this.blogPost$ = this.blogService.getAllPosts();
       });
+      this.route.paramMap.pipe(takeUntil(this.unsubscribe$)).subscribe((param2:ParamMap)=>{
+        this.config.currentPage = param2.get('100')
+        this.user$ = this.blogService.getAllUser()
+      });
+
   }
+ 
 
   delete(postId: string) {
     if (confirm("Are you sure?")) {

@@ -1,6 +1,9 @@
-<h1 class="mt-2">{{ formTitle }} Post</h1>
-<hr />
-<mat-card class="mat-elevation-z2 mt-3">
+
+
+
+<mat-card class="mat-elevation-z2 mt-3" >
+  <h1 class="mt-2">{{ formTitle }} Post</h1>
+  <hr />
   <form
     #myForm="ngForm"
     (ngSubmit)="myForm.form.valid && saveBlogPost()"
@@ -25,14 +28,16 @@
     </span>
     <br />
     <div class="form-group">
-      <ckeditor
-        name="myckeditor"
-        [config]="ckeConfig"
-        [(ngModel)]="postData.content"
-        #myckeditor="ngModel"
-        debounce="300"
-        [editor]="Editor"
-      ></ckeditor>
+      
+  
+      
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="myckeditor" placeholder="Add description..." [(ngModel)]="postData.content" #myckeditor="ngModel" ></textarea>
+        <br>
+        <br>
+        <label for="exampleFormControlFile1">Choose Photo that relate</label>
+    <input type="file" class="form-control-file" id="exampleFormControlFile1" (change)="uploadImg($event)">
+  
+      
     </div>
     <mat-card-actions>
       <div fxflex></div>
@@ -41,3 +46,4 @@
     </mat-card-actions>
   </form>
 </mat-card>
+

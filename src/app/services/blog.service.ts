@@ -3,6 +3,8 @@ import { Post } from "../models/Post";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
+import { AppUser } from "../models/appuser";
+// import { AppUser } from "../models/appuser";
 
 @Injectable({
   providedIn: "root",
@@ -14,6 +16,7 @@ export class BlogService {
     const postData = JSON.parse(JSON.stringify(post));
     return this.db.collection("blogs").add(postData);
   }
+  post: Post = new Post();
 
   getAllPosts(): Observable<Post[]> {
     const blogs = this.db
@@ -28,6 +31,22 @@ export class BlogService {
         })
       );
     return blogs;
+  }
+  getAllUser():Observable<AppUser[]>{
+    
+    const appUserArray = this.db
+      .collection<AppUser>("appusers", (ref) => ref.orderBy("name", "asc"))
+      .snapshotChanges()
+      .pipe(
+        map((actions) => {
+          return actions.map((c) => ({
+            userId: c.payload.doc["id"],
+            ...c.payload.doc.data(),
+          }));
+        })
+      );
+    // return appUserArray;
+    return appUserArray
   }
 
   getPostbyId(id: string): Observable<Post> {
